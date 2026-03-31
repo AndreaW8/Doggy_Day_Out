@@ -1,0 +1,8 @@
+# -------------------------
+# Data directory
+# -------------------------
+# Ignore everything in data/ but keep the folder and its .gitignore
+data/*
+!data/.gitignore
+
+.DS_Store
