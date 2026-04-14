@@ -81,135 +81,9 @@ CSV Data Input Files:
 
 """
 
-#package imports we need for this project
 import pandas as pd # Pandas to work with our data
-# import plotly.express as px # Plotly for visuliztion of our data
 import matplotlib.pyplot as plt
 from datetime import datetime # to clean up dates
-# import warnings # for ingnoring warnings
-# import re # for string parsing
-# import os
-
-# warnings.filterwarnings('ignore') # warnings will not be printed out
-
-# import plotly.io as pio
-
-
-
-# # -----------------------------------------------------------------------------
-# # Merge data new data if have it ***
-# # -----------------------------------------------------------------------------
-
-# # My OG data I recived in 2024
-# # ------------------------------
-# outcomes_df = pd.read_csv('Data/w_o_4_24__AnimalOutcomeExtended (12).csv', encoding='latin-1')  # dog outcomes data
-# intakes_df = pd.read_csv('Data/w_o_4_24__AnimalIntakeExtended (29).csv', encoding='latin-1')  # dog intake data
-# ddo_df = pd.read_csv('Data/w_o_4_24__DDOnumbers.csv', encoding='latin-1')  # Doggy Day Out (DDO) data
-
-
-
-# # ------------------------------
-# # filter out incomplete month of 4/2024 in OG data 
-#             # issues with data time saving correctly. tured out I needed to save excel files in CSV
-# # ------------------------------
-
-
-# # # outcomes_df
-# # # ------------------------------
-
-# # # print(outcomes_df.shape) # (6369, 29)
-
-# # outcomes_df['Outcome YYYYMMDD'] = outcomes_df['Outcome YYYYMMDD']\
-# #                                     .apply(lambda x: pd.to_datetime(str(x), format='%Y%m%d')) 
-
-# # outcomes_df = outcomes_df[~((outcomes_df['Outcome YYYYMMDD'].dt.month.astype('int64') == 4) &
-# #                           (outcomes_df['Outcome YYYYMMDD'].dt.year.astype('int64') == 2024))]
-
-# # # print(outcomes_df.shape) # (6253, 29)
-
-
-# # # intakes_df
-# # # ------------------------------
-# # # print(intakes_df.shape) # (6558, 39)
- 
-# # intakes_df['Intake Date/Time'] = pd.to_datetime(intakes_df['Intake Date/Time']) # change to datetime
-
-# # intakes_df = intakes_df[~((intakes_df['Intake Date/Time'].dt.month.astype('int64') == 4) &
-# #                           (intakes_df['Intake Date/Time'].dt.year.astype('int64') == 2024))]
-
-# # # print(intakes_df.shape) # (6415, 39)
-
-
-
-# # # ddo_df
-# # # ------------------------------
-# # print(ddo_df.shape) # (561, 37)
- 
-# # ddo_df[['Foster Start Date', 'Foster End Date']] = \
-# #         ddo_df[['Foster Start Date', 'Foster End Date']].apply(pd.to_datetime)
-
-# # ddo_df = ddo_df[~((ddo_df['Foster End Date'].dt.month.astype('int64') == 4) &
-# #                           (ddo_df['Foster End Date'].dt.year.astype('int64') == 2024))]
-
-# # print(ddo_df.shape) # (528, 37)
-
-
-
-# # New data!!
-# # ------------------------------read_excel
-# outcomes_df2 =pd.read_csv('Data/2025_AnimalOutcomeExtended (8).csv') # dog outcomes data
-# intakes_df2 = pd.read_csv('Data/2025_AnimalIntakeExtended (26).csv')  # dog intake data
-# ddo_df2 = pd.read_csv('Data/2025_FosterAnimalExtended (5).csv')  # Doggy Day Out (DDO) data
-
-
-
-# # issues with data time saving correctly. tured out I needed to save excel files in CSV
-# # ------------------------------
-# # # outcomes_df
-# # # ------------------------------
-# # outcomes_df2['Outcome YYYYMMDD'] = outcomes_df2['Outcome YYYYMMDD']\
-# #                                     .apply(lambda x: pd.to_datetime(str(x), format='%Y%m%d')) 
-
-
-# # # intakes_df
-# # # ------------------------------
-# # intakes_df2['Intake Date/Time'] = pd.to_datetime(intakes_df2['Intake Date/Time']) # change to datetime
-
-
-
-# # # ddo_df
-# # # ------------------------------
-# # ddo_df2[['Foster Start Date', 'Foster End Date']] = \
-# #         ddo_df2[['Foster Start Date', 'Foster End Date']].apply(pd.to_datetime)
-
-
-
-
-# # # What are the diffrent cols?
-# # [col for col in outcomes_df2.columns if col not in outcomes_df.columns]
-# # [col for col in intakes_df2.columns if col not in intakes_df.columns]
-# # [col for col in ddo_df.columns if col not in ddo_df2.columns]
-
-
-# # Columns in both
-# # ------------------------------
-# outcomes_cols = list(set(outcomes_df.columns).intersection(set(outcomes_df2.columns)))
-# intakes_cols = list(set(intakes_df.columns).intersection(set(intakes_df2.columns)))
-# ddo_cols = list(set(ddo_df.columns).intersection(set(ddo_df2.columns)))
-
-
-# # concat dfs
-# # ------------------------------
-# outcomes_df_combined = pd.concat([outcomes_df[outcomes_cols], outcomes_df2[outcomes_cols]], ignore_index=True)
-# intakes_df_combined = pd.concat([intakes_df[intakes_cols], intakes_df2[intakes_cols]], ignore_index=True)
-# ddo_df_combined = pd.concat([ddo_df[ddo_cols], ddo_df2[ddo_cols]], ignore_index=True)
-
-
-# # Save files
-# # ------------------------------
-# outcomes_df_combined.to_csv('Data/Combined_raw__AnimalOutcomeExtended.csv', index=False)
-# intakes_df_combined.to_csv('Data/Combined_raw__AnimalIntakeExtended.csv', index=False)
-# ddo_df_combined.to_csv('Data/Combined_raw__DDOnumbers.csv', index=False)
 
 
 
@@ -228,7 +102,6 @@ ddo_df = pd.read_csv('Data/Combined_raw__DDOnumbers.csv', encoding='latin-1')  #
 
 print('\n\n')
 print('Shape of animal outcomes dataframe:', outcomes_df.shape,'\n')
-# use .info() to get info about DataFrame like index dtype and columns, non-null values and memory usage.
 print(outcomes_df.info())
 
 # Shape of animal outcomes dataframe: (9851, 29) 
@@ -273,7 +146,6 @@ print(outcomes_df.info())
 
 print('\n\n')
 print('Shape of animal intake dataframe:', intakes_df.shape,'\n')
-# use .info() to get info about DataFrame like index dtype and columns, non-null values and memory usage.
 print(intakes_df.info())
 
 # Shape of animal intake dataframe: (10022, 39) 
@@ -329,7 +201,6 @@ print(intakes_df.info())
 
 print('\n\n')
 print('Shape of Doggy Day Out dataframe:', ddo_df.shape,'\n')
-# use .info() to get info about DataFrame like index dtype and columns, non-null values and memory usage.
 ddo_df.info()
 
 
@@ -384,7 +255,6 @@ ddo_df.info()
 # -----------------------------------------------------------------------------
 # Cleanup Our Data ****
 # -----------------------------------------------------------------------------
-# drop na How = ‘all’ meaning If all values in row are NA, drop that row
 outcomes_df = outcomes_df.dropna(how='all') 
 intakes_df = intakes_df.dropna(how='all') # intakes_df.shape = (6558, 39) but no col had more then 6558 non-null 
 ddo_df = ddo_df.dropna(how='all') # ddo_df.shape = (561, 37) but no col had more then 561 non-null
