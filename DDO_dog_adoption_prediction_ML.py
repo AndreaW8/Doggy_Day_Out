@@ -63,15 +63,11 @@ from sklearn.metrics import accuracy_score, f1_score
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.decomposition import PCA
 
-
 from imblearn.over_sampling import RandomOverSampler
 from imblearn.under_sampling import RandomUnderSampler
 
-
-# from pandas.testing import assert_frame_equal
 from collections import Counter
 import random
-# import os
 
 
 # random seed
@@ -109,31 +105,20 @@ def rf_search(X_, X_train_, X_test_, y_train_, y_test_, seed):
                 }
     
     scoring_metric_I_care_about = 'f1_macro'
-    # https://datascience.stackexchange.com/questions/40900/whats-the-difference-between-sklearn-f1-score-micro-and-weighted-for-a-mult
-    # https://towardsdatascience.com/micro-macro-weighted-averages-of-f1-score-clearly-explained-b603420b292f/
     # 'weighted' - favouring the majority class
     # 'micro' - no favouring any class in particular.
     # 'macro'  -  bigger penalisation when your model does not perform well with the minority classes.
 
 
-    rf_search = RandomizedSearchCV(RFC(),rf_params, # positional arguments, model and parameter grid
+    rf_search = RandomizedSearchCV(RFC(),rf_params, 
                                           n_iter=300,
                                           scoring=['accuracy', 'f1_macro', 'f1_micro', 'f1_weighted'],
                                           refit = scoring_metric_I_care_about,
-                                          # see scoring options here: https://scikit-learn.org/stable/modules/model_evaluation.html#scoring-parameter
                                           cv=10,
                                           random_state=project_seed,
-                                          # n_jobs=1)
                                           n_jobs=-1) 
     
-    
-    # rf_search = GridSearchCV(RFC(),rf_params, # positional arguments, model and parameter grid
-    #                                       scoring=['accuracy', 'f1_macro', 'f1_micro', 'f1_weighted'],
-    #                                       refit = scoring_metric_I_care_about,
-    #                                       # see scoring options here: https://scikit-learn.org/stable/modules/model_evaluation.html#scoring-parameter
-    #                                       cv=10,
-    #                                       # n_jobs=1)
-    #                                       n_jobs=-1) 
+
 
 
     rf_search.fit(X_train_,y_train_)
@@ -149,23 +134,9 @@ def rf_search(X_, X_train_, X_test_, y_train_, y_test_, seed):
     rf_search_df = rf_search_df.reset_index(drop=True)
 
 
-    # print('y.value_counts():')
-    # print(y.value_counts())
-    # print("------------------------------------------------------")
-
     # # Get the best Random Forest model
     best_rf_model = rf_search.best_estimator_
     
-    # y_pred = rf_search.predict(X_test_)
-
-    # print("------------------------------------------------------")
-    # # print("ALL THE Features used! ")
-    # print("Classification Report with hold-out sample for best fit of this model:...\n")
-    # print(type(RFC()))
-    # print(classification_report(y_test_,y_pred))
-    # print("------------------------------------------------------")
-    # print(f'Best Hyperparameters: {rf_search.best_params_}')
-    # print("------------------------------------------------------")
     feature_importances = best_rf_model.feature_importances_
 
 
@@ -192,32 +163,16 @@ def SVM_generic_search(X_train_, y_train_, SVM_params):
     
     
     scoring_metric_I_care_about = 'f1_macro'
-    # https://datascience.stackexchange.com/questions/40900/whats-the-difference-between-sklearn-f1-score-micro-and-weighted-for-a-mult
-    # https://towardsdatascience.com/micro-macro-weighted-averages-of-f1-score-clearly-explained-b603420b292f/
     # 'weighted' - favouring the majority class
     # 'micro' - no favouring any class in particular.
     # 'macro'  -  bigger penalisation when your model does not perform well with the minority classes.
 
-    # # Create a SearchCV object  
-    # SVM_search = RandomizedSearchCV(svm, SVM_params,
-    #                                    n_iter=100,
-    #                                   scoring=['accuracy', 'f1_macro', 'f1_micro', 'f1_weighted'],
-    #                                   refit = scoring_metric_I_care_about,
-    #                                   # see scoring options here: https://scikit-learn.org/stable/modules/model_evaluation.html#scoring-parameter
-    #                                   cv=10,
-    #                                   random_state=project_seed,
-    #                                   # verbose=3,
-    #                                    # n_jobs=1)
-    #                                    n_jobs=-1) 
     
     # Create a SearchCV object  
     SVM_search = GridSearchCV(svm, SVM_params,
                                       scoring=['accuracy', 'f1_macro', 'f1_micro', 'f1_weighted'],
                                       refit = scoring_metric_I_care_about,
-                                      # see scoring options here: https://scikit-learn.org/stable/modules/model_evaluation.html#scoring-parameter
                                       cv=10,
-                                      # verbose=3,
-                                       # n_jobs=1)
                                        n_jobs=-1) 
 
     # Perform the grid search
@@ -281,36 +236,13 @@ def svm_search(X_train_, X_test_, y_train_, y_test_):
     
     
     scoring_metric_I_care_about = 'f1_macro'
-    # https://datascience.stackexchange.com/questions/40900/whats-the-difference-between-sklearn-f1-score-micro-and-weighted-for-a-mult
-    # https://towardsdatascience.com/micro-macro-weighted-averages-of-f1-score-clearly-explained-b603420b292f/
     # 'weighted' - favouring the majority class
     # 'micro' - no favouring any class in particular.
     # 'macro'  -  bigger penalisation when your model does not perform well with the minority classes.
     
     
-    
     SVM_search_df = SVM_search_df.sort_values(by='mean_test_'+scoring_metric_I_care_about, ascending=False) 
     SVM_search_df = SVM_search_df.reset_index(drop=True)
-
-
-    # svm = SVC()
-
-    # best_model_prams = SVM_search_df['params'].iloc[0]
-
-    # svm_model = SVC(**best_model_prams)
-    # svm_model.fit(X_train_, y_train_)
-    # y_pred = svm_model.predict(X_test_)
-
-    # print("------------------------------------------------------")
-    # print("Classification Report with hold-out sample for best fit of this model:...\n")
-    # print(type(svm))
-    # print(classification_report(y_test_,y_pred))
-    # print("------------------------------------------------------")
-    # print(f'Best Hyperparameters: {best_model_prams}')
-    # print("------------------------------------------------------")
-    
-    # # SVM_feature_importances = best_SVM_model.coef_
-    # # AttributeError: coef_ is only available when using a linear kernel
     
     return SVM_search_df
 
@@ -382,13 +314,6 @@ def top_models_based_on_test_data(model, search_df, search_df_name, X_train_, X_
         }
     
     top_model_df = pd.DataFrame(metric_dict)
-    
-    # scoring_metric_I_care_about = 'f1_macro'
-    # # https://datascience.stackexchange.com/questions/40900/whats-the-difference-between-sklearn-f1-score-micro-and-weighted-for-a-mult
-    # # https://towardsdatascience.com/micro-macro-weighted-averages-of-f1-score-clearly-explained-b603420b292f/
-    # # 'weighted' - favouring the majority class
-    # # 'micro' - no favouring any class in particular.
-    # # 'macro'  -  bigger penalisation when your model does not perform well with the minority classes.
     
     return top_model_df
         
@@ -732,8 +657,6 @@ plt.show()
 
 
 
-
-
 X_selected = X.loc[:, feature_liz]
 
 scaler = MinMaxScaler()
@@ -792,8 +715,8 @@ sns.heatmap(
     correlation_matrix,
     mask=mask,
     cmap='bwr',
-    annot=True,         # This displays the correlation values
-    fmt='.2f',          # Two decimal places
+    annot=True,
+    fmt='.2f',
     linewidths=.5,
     cbar_kws={'shrink': 0.8, 'format': '%.2f'}
 )
@@ -807,19 +730,15 @@ plt.show()
 # -----------------------------------------------------------------------------
 # PCA ***
 # -----------------------------------------------------------------------------
-# use PCA to reduce the dimensionality of the data
-# Reference used: https://www.geeksforgeeks.org/implementing-pca-in-python-with-scikit-learn/
-
 
 # ----------------------------------
 # 2D plot!!!!
 # ----------------------------------
 
 random.seed(project_seed)
-# X_scaled.shape # X_scaled.shape # X {array-like, sparse matrix} of shape (n_samples, n_features)
 pca_2 = PCA(n_components=2)
 
-X_pca_2 =pca_2.fit_transform(X_scaled) # Returns: ndarray of shape (n_samples, n_components)
+X_pca_2 =pca_2.fit_transform(X_scaled) 
 # X_pca_2.shape # (n_samples, 2)
 
 
@@ -1026,14 +945,10 @@ for name, df in zip(rf_df_liz_nmae, rf_df_liz):
 
 
 scoring_metric_I_care_about = 'mean_test_f1_macro'
-# https://datascience.stackexchange.com/questions/40900/whats-the-difference-between-sklearn-f1-score-micro-and-weighted-for-a-mult
-# https://towardsdatascience.com/micro-macro-weighted-averages-of-f1-score-clearly-explained-b603420b292f/
 # 'weighted' - favouring the majority class
 # 'micro' - no favouring any class in particular.
 # 'macro'  -  bigger penalisation when your model does not perform well with the minority classes.
     
-# ['index', 'params', 'mean_test_accuracy', 'mean_test_f1_macro',
-#        'mean_test_f1_micro', 'mean_test_f1_weighted']
 rf_top_models_CV_df = pd.DataFrame(rf_top_models_CV)
 rf_top_models_CV_df = rf_top_models_CV_df.sort_values(by=scoring_metric_I_care_about, ascending=False) 
 rf_top_models_CV_df = rf_top_models_CV_df.reset_index(drop=True)
@@ -1043,7 +958,6 @@ rf_top_models_CV_df = rf_top_models_CV_df.reset_index(drop=True)
 # -------------------------------------------------------
 # create  rf_top_models_test_df - based on results from testing data to allow me to rank models
 # -------------------------------------------------------
-
 
 rf_top_models_test_data = []
 
@@ -1081,7 +995,6 @@ best_model_prams = rf_search_df['params'].iloc[0]
 rf_best_model = RFC(**best_model_prams)
     
 rf_best_model.fit(X_train, y_train)
-# y_pred = rf_best_model.predict(X_test)
 rf_feature_scores_best_model = rf_best_model.feature_importances_
 
 rf_feature_scores_best_model_test_df = pd.DataFrame(zip(X.columns, rf_feature_scores_best_model), columns=['Feature', 'feature_importances'])
@@ -1213,16 +1126,6 @@ for name, df in zip(SVM_df_liz_nmae, SVM_df_liz):
     first_row['run'] = name
     SVM_top_models_CV.append(first_row)
 
-
-# scoring_metric_I_care_about = 'mean_test_f1_macro'
-# https://datascience.stackexchange.com/questions/40900/whats-the-difference-between-sklearn-f1-score-micro-and-weighted-for-a-mult
-# https://towardsdatascience.com/micro-macro-weighted-averages-of-f1-score-clearly-explained-b603420b292f/
-# 'weighted' - favouring the majority class
-# 'micro' - no favouring any class in particular.
-# 'macro'  -  bigger penalisation when your model does not perform well with the minority classes.
-    
-# ['index', 'params', 'mean_test_accuracy', 'mean_test_f1_macro',
-#        'mean_test_f1_micro', 'mean_test_f1_weighted']
 
 SVM_top_models_CV_df = pd.DataFrame(SVM_top_models_CV)
 SVM_top_models_CV_df = SVM_top_models_CV_df.sort_values(by=scoring_metric_I_care_about, ascending=False) 
