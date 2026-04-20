@@ -1,4 +1,4 @@
-# Doggy Day Out: Evaluating the Effectiveness on Dog Adoption
+# Doggy Day Out (DDO): Evaluating the Effectiveness on Dog Adoption
 
 ## About <a name = "about"></a>
 Animal shelters face a range of challenges when placing animals in permanent homes, including limited funding, space constraints, the need to screen potential adopters, and the individual characteristics of each animal. Increasing the adoption rate and reducing the length of stay are both practical goals and ethical responsibilities. To support these objectives, the Williamson County Regional Animal Shelter in Georgetown, TX, implemented a “Doggy Day Out” (DDO) program in 2023. This initiative allows members of the public to take a dog on a one-day outing, giving the animal a chance to socialize in a more typical environment such as a home or park.
@@ -9,14 +9,47 @@ Learn more about the Doggy Day Out program:
 https://www.wilcotx.gov/379/Doggy-Day-Out
 
 How do you DDO?
-https://www.youtube.com/watch?v=Vbfd7KTQ4BU
+https://www.youtube.com/watch?v=Vbfd7KTQ4BUparticipation in Doggy Day Out was not a strong predictor of whether a dog would be adopted. In model after model, more traditional factors like length of stay, age, and size were shown to be key drivers of adoption outcomes. 
 
 ## Project Overview
 
 - **Goal:** Evaluate whether Doggy Day Out (DDO) improves dog adoption outcomes.
-- **Methods:** Data cleaning, feature engineering, classification models.
-- **Results:** No statistically significant association found between DDO participation and adoption as an outcome
-- **Usefulness of Results:** This allowed the shelter to embrace that DDO is a community engagement program and better know where it fits in to support its mission. DDO is a way to enable the community to engage with the shelter and support unhoused pets in the shelter's care.
+- **Methods:** Data cleaning, feature engineering to transform raw data into model ready features, mutual information feature selection, and classification models (SVM, Random Forest).
+- **Performance Evaluation:** Models were evaluated on a withheld test set using accuracy and F1 score. F1 macro was used as the primary metric because the classes are imbalanced.
+
+## Results
+
+- No statistically significant association was found between DDO participation and adoption as an outcome.
+- **Usefulness of Results:** This allowed the shelter to embrace DDO as a community engagement program and better understand where it fits in supporting its mission. DDO is a way to enable the community to engage with the shelter and support unhoused pets in the shelter's care.
+
+### DDO Feature Behavior
+- Adding DDO participation as a feature did not meaningfully improve model performance, indicating that simply going on a DDO outing was not a strong standalone predictor of adoption. More traditional factors like length of stay, age, and size were shown to be key drivers of adoption outcomes. 
+
+- In the top 20 features ranked by mutual information, the DDO indicator appears near the bottom, suggesting limited marginal relevance for predicting adoption.
+  <img width="928" height="556" alt="DDO_top_20_MI" src="https://github.com/user-attachments/assets/def189c9-04c2-4e62-8661-6d81c366077d" />
+
+- In the Random Forest model trained on all features, DDO is ranked third in importance, but its importance score is much smaller than that of the top two features. The top 15 features are shown here.
+  <img width="928" height="560" alt="Random Forest feature importance with DDO" src="https://github.com/user-attachments/assets/11073891-5800-4b55-be42-aa28bfbc3d63" />
+
+- For SVM, the DDO feature does not contribute meaningfully with a coefficient close to 0. This reinforces that the effect was small or indistinguishable from noise in this dataset.
+  <img width="928" height="560" alt="SVM_DDO_top_20_MI" src="https://github.com/user-attachments/assets/d42ae374-9367-4ee9-9d9f-227d98835e2b" />
+
+### Interpretation for the shelter
+
+- The absence of a strong statistical link between DDO and adoption suggests the program should be used as a **welfare and outreach** initiative rather than a guaranteed adoption booster.
+
+## Data
+
+- **Intakes:** Status of animals during shelter intake.
+- **Outcomes:** Status and outcome when animals leave the shelter.
+- **Dog Day Out:** Log of dogs that participated in DDO.
+
+## Key Scripts
+
+| Script                          | Description |
+|----------------------------------|-------------|
+| `DDO_data_cleaning.py` | Cleans and preprocesses shelter data from multiple CSV files (Dog Intakes, Outcomes, DDO). Merges records as needed for analysis.<br><br>**Output Data files:**<br>- One row per animal ID per stay:<br>  &nbsp;&nbsp;-- `Output__Animal_ID_per_stay_n_ddo_cnt_df.csv`<br>  &nbsp;&nbsp;-- `Output__Animal_ID_per_stay_n_ddo_cnt_NO_PUPPIES_df.csv`<br>- One row per animal ID with cumulative sum of shelter stay time:<br>  &nbsp;&nbsp;-- `Output___per_Animal_ID_n_ddo_cnt_df.csv`<br>  &nbsp;&nbsp;-- `Output___per_Animal_ID_n_ddo_cnt_NO_PUPPIES_df.csv` |
+| `DDO_dog_adoption_prediction_ML.py` | Builds and evaluates ML models (Random Forest, SVM) using features prepared from cleaning. Includes feature selection, PCA, model training, cross-validation, and visualization of results. |                                                                           |
 
 ## Getting Started <a name = "getting_started"></a>
 
@@ -64,19 +97,6 @@ You can set up the required environment using either Conda or pip.
    ```
 
 End with an example of getting some data out of the system or using it for a little demo.
-
-## Key Scripts
-
-| Script                          | Description |
-|----------------------------------|-------------|
-| `DDO_data_cleaning.py` | Cleans and preprocesses shelter data from multiple CSV files (Dog Intakes, Outcomes, DDO). Merges records as needed for analysis.<br><br>**Output Data files:**<br>- One row per animal ID per stay:<br>  &nbsp;&nbsp;-- `Output__Animal_ID_per_stay_n_ddo_cnt_df.csv`<br>  &nbsp;&nbsp;-- `Output__Animal_ID_per_stay_n_ddo_cnt_NO_PUPPIES_df.csv`<br>- One row per animal ID with cumulative sum of shelter stay time:<br>  &nbsp;&nbsp;-- `Output___per_Animal_ID_n_ddo_cnt_df.csv`<br>  &nbsp;&nbsp;-- `Output___per_Animal_ID_n_ddo_cnt_NO_PUPPIES_df.csv` |
-| `DDO_dog_adoption_prediction_ML.py` | Builds and evaluates ML models (Random Forest, SVM) using features prepared from cleaning. Includes feature selection, PCA, model training, cross-validation, and visualization of results. |                                                                           |
-
-## Data
-
-- **Intakes:** Status of animals during shelter intake.
-- **Outcomes:** Status and outcome when animals leave the shelter.
-- **Dog Day Out:** Log of dogs that participated in DDO.
 
 ## Example Usage
 
