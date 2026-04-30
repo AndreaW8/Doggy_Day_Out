@@ -3,7 +3,7 @@
 ## About <a name = "about"></a>
 Animal shelters face a range of challenges when placing animals in permanent homes, including limited funding, space constraints, the need to screen potential adopters, and the individual characteristics of each animal. Increasing the adoption rate and reducing the length of stay are both practical goals and ethical responsibilities. To support these objectives, the Williamson County Regional Animal Shelter in Georgetown, TX, implemented a “Doggy Day Out” (DDO) program in 2023. This initiative allows members of the public to take a dog on a one-day outing, giving the animal a chance to socialize in a more typical environment such as a home or park.
 
-This project evaluates whether participation in the DDO program is associated with improved adoption outcomes. This approach combines feature selection and classification methods to identify key factors and evaluate the program’s effectiveness.
+This analysis evaluates whether participation in the DDO program is associated with improved adoption outcomes. This approach combines feature selection and classification methods to identify key factors and evaluate the program’s effectiveness.
 
 [Learn more about the Doggy Day Out program](https://www.wilcotx.gov/379/Doggy-Day-Out)
 
@@ -11,7 +11,7 @@ This project evaluates whether participation in the DDO program is associated wi
 
 [Read my LinkedIn article: How Machine Learning Helped Me Rethink the Impact of a Doggy Day Out Program in Animal Shelters](https://www.linkedin.com/pulse/how-machine-learning-helped-me-rethink-impact-doggy-day-wackerle-vbegc)
 
-## Project Overview
+## Overview
 
 - **Goal:** Evaluate whether Doggy Day Out (DDO) improves dog adoption outcomes.
 - **Methods:** Data cleaning, feature engineering to transform raw data into model ready features, mutual information feature selection, and classification models (SVM, Random Forest).
